@@ -1,0 +1,11 @@
+// middleware usage
+Wenn man middleware benutzten will ruft man auf app use auf also app.use()
+
+
+// Public folder
+Public ist eine static file, d. h. hier kommt content für user rein der nicht generiert werden muss z. B. Flavicon, css... 
+
+
+  1.  A user sends a request for a file to the web server.
+  2.  The web server retrieves the file from disk.
+  3.  The web server sends the file to the user.

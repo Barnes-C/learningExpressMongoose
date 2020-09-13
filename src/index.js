@@ -7,6 +7,8 @@ const logger = require('./middleware/logger');
 const app = express();
 
 // Handlebars Middleware
+app.set('views', path.join(__dirname, '/views'));
+app.set('partials', path.join(__dirname, '/views/layouts'));
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 

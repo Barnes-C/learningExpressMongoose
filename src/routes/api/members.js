@@ -37,7 +37,8 @@ router
         }
         // members.save(newMember) <-- mongoose
         members.push(newMember);
-        res.json(members);
+        //res.json(members);
+        res.redirect('/');
     })
     .put('/:id', (req, res) => {
         const found = members.some(

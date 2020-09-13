@@ -3,7 +3,7 @@ const path = require('path');
 const exphbs = require('express-handlebars');
 
 const logger = require('./middleware/logger');
-
+const members = require('./Members');
 const app = express();
 
 // Handlebars Middleware
@@ -16,8 +16,13 @@ app.set('view engine', 'handlebars');
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Homepage route
-app.get('/', (_, res) => res.render('index'));
+// Homepage route mit object passing
+app.get('/', (_, res) =>
+    res.render('index', {
+        title: 'Member App',
+        members,
+    }),
+);
 
 // Logger Middleware
 app.use(logger);

@@ -1,20 +1,20 @@
 const members = [
     {
         id: 1,
-        name: 'John Doe',
-        email: 'john@gmail.com',
+        name: 'Kevin Anderer',
+        email: 'KevinAnderer@gmail.com',
         status: 'active',
     },
     {
         id: 2,
-        name: 'Bob Williams',
-        email: 'bob@gmail.com',
+        name: 'Atha SC',
+        email: 'AthaSC@gmail.com',
         status: 'inactive',
     },
     {
         id: 3,
-        name: 'Shannon Jackson',
-        email: 'shannon@gmail.com',
+        name: 'Flo Kanacke',
+        email: 'FloKanacke@gmail.com',
         status: 'active',
     },
 ];

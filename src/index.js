@@ -14,7 +14,18 @@ app.get('/api/members', (req, res) => res.json(members));
 
 // Get Single Member
 app.get('api/members/:id', (req, res) => {
-    res.json(members.filter((member) => member.id == req.params.id));
+    const found = member.some(
+        (member) => member.id === parseInt(req.params.id),
+    );
+    if (found) {
+        res.json(
+            members.filter((member) => member.id === parseInt(req.params.id)),
+        );
+    } else {
+        res.status(404).json({
+            msg: `No member with the id of ${req.params.id}`,
+        });
+    }
 });
 
 // Set public folder

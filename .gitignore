@@ -27,3 +27,5 @@ yarn.lock
 # System files
 .DS_Store
 Thumbs.db
+
+notes.txt

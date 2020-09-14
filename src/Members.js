@@ -1,19 +1,19 @@
 const members = [
     {
         id: 1,
-        name: 'Kevin Anderer',
-        password: 'rofl!123123',
+        name: 'Kevin',
+        password: 'rofl!123',
         status: 'active',
     },
     {
         id: 2,
-        name: 'Atha SC',
-        password: 'atha123',
+        name: 'Atha',
+        password: 'Atha123',
         status: 'inactive',
     },
     {
         id: 3,
-        name: 'Flo Nikqi',
+        name: 'Flo',
         password: 'daydee',
         status: 'active',
     },

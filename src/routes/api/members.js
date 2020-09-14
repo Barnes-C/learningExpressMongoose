@@ -4,6 +4,7 @@ const router = express.Router();
 const members = require('../../Members');
 const httpStatus = require('../../middleware/HttpStatus');
 const bcrypt = require('bcrypt');
+const { parse } = require('json5');
 
 router.get('/', (_, res) => res.json(members));
 
@@ -36,6 +37,13 @@ router
                 msg: 'Please include a name and password',
             });
         }
+        bcrypt.hash(newMember.password, 10, function (err, hash) {
+            if (err) {
+                return err;
+            } else {
+                newMember.password = hash;
+            }
+        });
         // members.save(newMember) <-- mongoose
         members.push(newMember);
         //res.json(members);

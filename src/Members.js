@@ -2,19 +2,19 @@ const members = [
     {
         id: 1,
         name: 'Kevin Anderer',
-        email: 'KevinAnderer@gmail.com',
+        password: 'rofl!123123',
         status: 'active',
     },
     {
         id: 2,
         name: 'Atha SC',
-        email: 'AthaSC@gmail.com',
+        password: 'atha123',
         status: 'inactive',
     },
     {
         id: 3,
-        name: 'Flo Kanacke',
-        email: 'FloKanacke@gmail.com',
+        name: 'Flo Nikqi',
+        password: 'daydee',
         status: 'active',
     },
 ];

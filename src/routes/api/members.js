@@ -2,9 +2,10 @@ const express = require('express');
 const uuid = require('uuid');
 const router = express.Router();
 const members = require('../../Members');
-const httpStatus = require('../../middleware/httpStatus');
+const httpStatus = require('../../middleware/HttpStatus');
+const bcrypt = require('bcrypt');
 
-router.get('/', (req, res) => res.json(members));
+router.get('/', (_, res) => res.json(members));
 
 router
     .get('/:id', (req, res) => {
@@ -24,15 +25,17 @@ router
         }
     })
     .post('/', (req, res) => {
+        console.log(req.body.name);
+        console.log(req.body.password);
         const newMember = {
             id: uuid.v4(),
             name: req.body.name,
-            email: req.body.email,
+            password: req.body.password,
             status: 'active',
         };
-        if (!newMember.name || !newMember.email) {
+        if (!newMember.name || !newMember.password) {
             return res.status(httpStatus.BAD_REQUEST).json({
-                msg: 'Please include a name and email',
+                msg: 'Please include a name and password',
             });
         }
         // members.save(newMember) <-- mongoose
@@ -49,9 +52,9 @@ router
             members.forEach((member) => {
                 if (member.id === parseInt(req.params.id)) {
                     member.name = updMember.name ? updMember.name : member.name;
-                    member.email = updMember.email
-                        ? updMember.email
-                        : member.email;
+                    member.password = updMember.password
+                        ? updMember.password
+                        : member.password;
                     res.json({ msg: 'Member updated', member });
                 }
             });

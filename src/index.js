@@ -27,7 +27,7 @@ app.get('/', (_, res) =>
 // Logger Middleware
 app.use(logger);
 
-// Set public/static folder
+// Set public/static folder (muss unter der route mit der homepage sein)
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Members API Routes

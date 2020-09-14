@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 
-const userSchema = new mongoose.Schema({
+const memberSchema = new mongoose.Schema({
     _id: {},
     name: {
         type: String,
         required: [true, 'Username is required'],
     },
     password: {
-        type: password,
+        type: String,
         required: [true, 'Password is required'],
     },
     status: {
@@ -15,11 +15,10 @@ const userSchema = new mongoose.Schema({
     },
     created: {
         type: Date,
-        required: [true, 'Created date is required'],
     },
 });
 
-module.exports = userSchema;
+module.exports = memberSchema;
 
 // Optimistische Synchronisation durch das Feld __v fuer die Versionsnummer
 // buchSchema.plugin(optimistic);

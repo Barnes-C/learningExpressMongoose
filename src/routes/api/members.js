@@ -3,12 +3,13 @@ const uuid = require('uuid');
 const router = express.Router();
 const members = require('../../Members');
 const httpStatus = require('../../middleware/HttpStatus');
+const memberModel = require('../../member/entity/member.model');
 const bcrypt = require('bcrypt');
 
 router.get('/', (_, res) => res.json(members));
 
 router
-    .get('/:id', (req, res) => {
+    .get('/:id', async (req, res) => {
         const found = members.some(
             (member) => member.id === parseInt(req.params.id),
         );
@@ -24,31 +25,41 @@ router
             });
         }
     })
-    .post('/', (req, res) => {
-        const newMember = {
-            id: uuid.v4(),
-            name: req.body.name,
-            password: req.body.password,
-            active: true,
-        };
-        if (!newMember.name || !newMember.password) {
-            return res.status(httpStatus.BAD_REQUEST).json({
-                msg: 'Please include a name and password',
-            });
+    .post('/', async (req, res) => {
+        const newMember = new memberModel(req.body);
+
+        try {
+            await newMember.save();
+            res.send(newMember);
+        } catch (err) {
+            res.status(httpStatus.INTERNAL_ERROR).send(err);
         }
-        bcrypt.hash(newMember.password, 10, function (err, hash) {
-            if (err) {
-                return err;
-            } else {
-                newMember.password = hash;
-            }
-        });
-        // members.save(newMember) <-- mongoose
-        members.push(newMember);
-        //res.json(members);
-        res.redirect('/');
     })
-    .put('/:id', (req, res) => {
+    // .post('/', async (req, res) => {
+    //     const newMember = {
+    //         id: uuid.v4(),
+    //         name: req.body.name,
+    //         password: req.body.password,
+    //         active: true,
+    //     };
+    //     if (!newMember.name || !newMember.password) {
+    //         return res.status(httpStatus.BAD_REQUEST).json({
+    //             msg: 'Please include a name and password',
+    //         });
+    //     }
+    //     bcrypt.hash(newMember.password, 10, function (err, hash) {
+    //         if (err) {
+    //             return err;
+    //         } else {
+    //             newMember.password = hash;
+    //         }
+    //     });
+    //     // members.save(newMember) <-- mongoose
+    //     members.push(newMember);
+    //     //res.json(members);
+    //     res.redirect('/');
+    // })
+    .put('/:id', async (req, res) => {
         const found = members.some(
             (member) => member.id === parseInt(req.params.id),
         );
@@ -69,7 +80,7 @@ router
             });
         }
     })
-    .delete('/:id', (req, res) => {
+    .delete('/:id', async (req, res) => {
         const found = members.some(
             (member) => member.id === parseInt(req.params.id),
         );

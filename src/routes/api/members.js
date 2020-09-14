@@ -4,7 +4,6 @@ const router = express.Router();
 const members = require('../../Members');
 const httpStatus = require('../../middleware/HttpStatus');
 const bcrypt = require('bcrypt');
-const { parse } = require('json5');
 
 router.get('/', (_, res) => res.json(members));
 
@@ -30,7 +29,7 @@ router
             id: uuid.v4(),
             name: req.body.name,
             password: req.body.password,
-            status: 'active',
+            active: true,
         };
         if (!newMember.name || !newMember.password) {
             return res.status(httpStatus.BAD_REQUEST).json({

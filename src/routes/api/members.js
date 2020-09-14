@@ -25,8 +25,6 @@ router
         }
     })
     .post('/', (req, res) => {
-        console.log(req.body.name);
-        console.log(req.body.password);
         const newMember = {
             id: uuid.v4(),
             name: req.body.name,

@@ -1,12 +1,11 @@
 const express = require('express');
 const path = require('path');
 const exphbs = require('express-handlebars');
+const mongoose = require('mongoose');
 
 const logger = require('./middleware/logger');
 const members = require('./Members');
 const app = express();
-
-const mongoose = require('mongoose');
 
 // Handlebars Middleware
 app.set('views', path.join(__dirname, '/views'));
@@ -26,9 +25,6 @@ app.get('/', async (_, res) =>
     }),
 );
 
-// Logger Middleware
-app.use(logger);
-
 // Set public/static folder (muss unter der route mit der homepage sein)
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -42,9 +38,9 @@ mongoose.connect(
         useNewUrlParser: true,
         useUnifiedTopology: true,
     },
-    () => console.info('Connected to Atlas...'),
+    () => logger.info('Connected to Atlas...'),
 );
 
 // Listen on a port
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.info(`Server started on port ${PORT}`));
+app.listen(PORT, () => logger.info(`Server started on port ${PORT}`));

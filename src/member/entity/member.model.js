@@ -1,23 +1,16 @@
 const { Schema, model } = require('mongoose');
 
 const memberSchema = new Schema({
-    _id: {
-        type: String,
-    },
-    name: {
-        type: String,
-        required: [true, 'Username is required'],
-    },
+    // MongoDB generates their own index for _id
+    _id: { type: String },
+    name: { type: String, required: true },
     password: {
         type: String,
         required: [true, 'Password is required'],
     },
-    status: {
-        type: Boolean,
-    },
-    created: {
-        type: Date,
-    },
+    age: Date,
+    active: Boolean,
+    timestamps: true,
 });
 
 // Optimistische Synchronisation durch das Feld __v fuer die Versionsnummer

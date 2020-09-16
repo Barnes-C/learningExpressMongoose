@@ -1,4 +1,4 @@
-const httpStatus = Object.freeze({
+const HttpStatus = Object.freeze({
     OK: 200,
     CREATED: 201,
     NO_CONTENT: 204,
@@ -14,4 +14,4 @@ const httpStatus = Object.freeze({
     NOT_YET_IMPLEMENTED: 501,
 });
 
-module.exports = httpStatus;
+module.exports = HttpStatus;

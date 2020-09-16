@@ -3,7 +3,7 @@ const uuid = require('uuid');
 const router = express.Router();
 const members = require('../../Members');
 const HttpStatus = require('../../middleware/HttpStatus');
-const bcrypt = require('bcrypt');
+const { hash } = require('bcrypt');
 const SALT_ROUNDS = 10;
 
 router
@@ -25,7 +25,7 @@ router
     .post('/', (req, res) => {
         let { name, password } = req.body;
         let newMember = {
-            id: uuid.v4(),
+            id: uuid.v4(), // not needed when using mongoDB
             name: name,
             password: password,
             active: true,
@@ -36,16 +36,19 @@ router
             });
         }
         // Encrypting Password via bcrypt
-        bcrypt.hash(password, SALT_ROUNDS, function (err, hash) {
+        hash(password, SALT_ROUNDS, function (err, hash) {
             if (err) {
                 return err;
             } else {
-                password = hash;
+                console.log(hash);
+
+                newMember.password = hash;
             }
         });
+        console.log(password);
         // members.save(newMember) <-- mongoose
         members.push(newMember);
-        res.redirect('/');
+        res.redirect(HttpStatus.FOUND, '/');
     })
     // Update Member by Id
     .put('/:id', (req, res) => {

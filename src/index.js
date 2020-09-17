@@ -8,7 +8,7 @@ const logger = require('./middleware/logger');
 const members = require('./Members');
 const app = express();
 
-// Compression Middleware
+// Compression Middleware : ratio = 1.6
 app.use(compression());
 
 // Handlebars Middleware
@@ -48,3 +48,8 @@ mongoose.connect(
 // Listen on a port
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => logger.info(`Server started on port ${PORT}`));
+
+logger.info('info');
+logger.warn('warn');
+logger.debug('debug');
+logger.error('error');

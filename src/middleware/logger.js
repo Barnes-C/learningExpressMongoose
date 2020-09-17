@@ -1,28 +1,14 @@
-const winston = require('winston');
+// https://strongloop.com/strongblog/compare-node-js-logging-winston-bunyan/
+const { format, createLogger, transports } = require('winston');
+const { loglevels, fileOptions, consoleOptions } = require('./config/logger');
+const { combine, colorize, simple, timestamp } = format;
+const { File } = transports;
 
-const logger = winston.createLogger({
-    level: 'info',
-    format: winston.format.json(),
-    transports: [
-        //
-        // - Write all logs with level `error` and below to `error.log`
-        // - Write all logs with level `info` and below to `combined.log`
-        //
-        new winston.transports.File({ filename: 'combined.log' }),
-    ],
+const logger = createLogger({
+    levels: loglevels.levels,
+    format: combine(colorize(), simple()),
+    transports: [new transports.Console(consoleOptions), new File(fileOptions)],
+    level: 'custom',
 });
 
-//
-// If we're not in production then log to the `console` with the format:
-// `${info.level}: ${info.message} JSON.stringify({ ...rest }) `
-//
-if (process.env.NODE_ENV !== 'production') {
-    logger.add(
-        new winston.transports.Console({
-            format: winston.format.simple(),
-        }),
-    );
-}
-
 module.exports = logger;
-1;

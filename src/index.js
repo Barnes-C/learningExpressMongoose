@@ -2,10 +2,14 @@ const express = require('express');
 const path = require('path');
 const exphbs = require('express-handlebars');
 const mongoose = require('mongoose');
+const compression = require('compression');
 
 const logger = require('./middleware/logger');
 const members = require('./Members');
 const app = express();
+
+// Compression Middleware
+app.use(compression());
 
 // Handlebars Middleware
 app.set('views', path.join(__dirname, '/views'));

@@ -1,22 +1,22 @@
 const members = [
-    {
-        id: 1,
-        name: 'Kevin',
-        password: 'rofl!123',
-        status: 'active',
-    },
-    {
-        id: 2,
-        name: 'Atha',
-        password: 'Atha123',
-        status: 'inactive',
-    },
-    {
-        id: 3,
-        name: 'Flo',
-        password: 'daydee',
-        status: 'active',
-    },
+  {
+    id: 1,
+    name: 'Kevin',
+    password: 'rofl!123',
+    status: 'active',
+  },
+  {
+    id: 2,
+    name: 'Atha',
+    password: 'Atha123',
+    status: 'inactive',
+  },
+  {
+    id: 3,
+    name: 'Flo',
+    password: 'daydee',
+    status: 'active',
+  },
 ];
 
 module.exports = members;

@@ -1,15 +1,12 @@
 const express = require('express');
 const path = require('path');
 const exphbs = require('express-handlebars');
-const mongoose = require('mongoose');
 const compression = require('compression');
-const {
-    connectMongoDB,
-    closeMongoDBClient,
-} = require('./middleware/config/db/mongoDB');
-
+const { connectMongoDBClient } = require('./middleware/config/db/mongoDB');
 const logger = require('./middleware/logger');
 const members = require('./middleware/config/db/Members');
+
+// Express Middleware
 const app = express();
 
 // Compression Middleware : ratio = 1.6
@@ -27,10 +24,10 @@ app.use(express.urlencoded({ extended: false }));
 
 // Homepage route mit object passing
 app.get('/', async (_, res) =>
-    res.render('index', {
-        title: 'Member App',
-        members,
-    }),
+  res.render('index', {
+    title: 'Member App',
+    members,
+  })
 );
 
 // Set public/static folder (muss unter der route mit der homepage sein)
@@ -40,8 +37,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/members', require('./routes/api/members'));
 
 // MongoDB connection
-connectMongoDB();
+connectMongoDBClient();
 
 // Listen on a port
 const PORT = process.env.PORT || 5000;
-//app.listen(PORT, () => logger.info(`Server started on port ${PORT}`));
+app.listen(PORT, () => logger.info(`Server started on port ${PORT}`));

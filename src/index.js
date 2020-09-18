@@ -3,9 +3,13 @@ const path = require('path');
 const exphbs = require('express-handlebars');
 const mongoose = require('mongoose');
 const compression = require('compression');
+const {
+    connectMongoDB,
+    closeMongoDBClient,
+} = require('./middleware/config/db/mongoDB');
 
 const logger = require('./middleware/logger');
-const members = require('./Members');
+const members = require('./middleware/config/db/Members');
 const app = express();
 
 // Compression Middleware : ratio = 1.6
@@ -36,20 +40,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/members', require('./routes/api/members'));
 
 // MongoDB connection
-mongoose.connect(
-    'mongodb+srv://BarnesC:p@barnescluster0.wmnj6.mongodb.net/members?retryWrites=true&w=majority',
-    {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    },
-    () => logger.info('Connected to Atlas...'),
-);
+connectMongoDB();
 
 // Listen on a port
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => logger.info(`Server started on port ${PORT}`));
-
-logger.info('info');
-logger.warn('warn');
-logger.debug('debug');
-logger.error('error');
+//app.listen(PORT, () => logger.info(`Server started on port ${PORT}`));

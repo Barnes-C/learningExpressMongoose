@@ -6,11 +6,11 @@ const memberSchema = new Schema({
   name: { type: String, required: true },
   password: {
     type: String,
-    required: [true, 'Password is required'],
+    required: true,
   },
   age: Date,
   active: Boolean,
-  timestamps: true,
+  created: Date,
 });
 
 // Optimistische Synchronisation durch das Feld __v fuer die Versionsnummer

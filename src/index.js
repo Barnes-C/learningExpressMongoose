@@ -24,10 +24,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // Homepage route mit object passing
 app.get('/', async (_, res) =>
-  res.render('index', {
-    title: 'Member App',
-    members,
-  })
+  res.render('index', { title: 'Member App', members })
 );
 
 // Set public/static folder (muss unter der route mit der homepage sein)

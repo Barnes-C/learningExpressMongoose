@@ -1,11 +1,13 @@
 const express = require('express');
-const uuid = require('uuid');
-
-const router = express.Router();
 const { hashSync } = require('bcrypt');
+const mongoose = require('mongoose');
+const MemberModel = require('../../member/entity/member.model');
 const members = require('../../middleware/config/db/Members');
 const HttpStatus = require('../../middleware/httpStatus');
 const logger = require('../../middleware/logger');
+const { connectMongoDBClient } = require('../../middleware/config/db/mongoDB');
+
+const router = express.Router();
 
 const SALT_ROUNDS = 10;
 
@@ -29,11 +31,14 @@ router
   .post('/', (req, res) => {
     const { name, password } = req.body;
     const newMember = {
-      _id: uuid.v4(), // not needed when using mongoDB
+      _id: null,
       name,
       password,
       active: true,
+      age: null,
+      created: Date.now(),
     };
+
     if (!name || !password) {
       res
         .status(HttpStatus.BAD_REQUEST)
@@ -42,9 +47,24 @@ router
     // Encrypting Password via bcrypt: $2b$[cost]$[22 character salt][31 character hash]
     newMember.password = hashSync(password, SALT_ROUNDS);
 
-    // members.save(newMember)
+    mongoose.Promise = global.Promise;
+    mongoose.connect(
+      'mongodb+srv://BarnesC:p@barnescluster0.wmnj6.mongodb.net/members?retryWrites=true&w=majority',
+      { useNewUrlParser: true, useUnifiedTopology: true }
+    );
+
+    MemberModel.create(newMember, (err) => {
+      if (err) {
+        res
+          .status(HttpStatus.BAD_REQUEST)
+          .send(`unable to save to database, ${err}`)
+          .redirect('/');
+      } else {
+        res.status(HttpStatus.OK).redirect('/');
+      }
+    });
+
     members.push(newMember);
-    res.redirect(HttpStatus.FOUND, '/');
   })
   // Update Member by Id
   .put('/:id', (req, res) => {

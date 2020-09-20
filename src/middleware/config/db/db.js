@@ -16,7 +16,7 @@ const {
 // -----------------------------------------------------------------------------
 // E i n s t e l l u n g e n
 // -----------------------------------------------------------------------------
-const dbName = DB_NAME ?? 'member';
+const dbName = DB_NAME ?? 'members';
 const atlas = DB_HOST?.endsWith('mongodb.net') ?? false;
 const host = DB_HOST ?? 'barnescluster0.wmnj6.mongodb.net';
 const user = DB_USER ?? 'BarnesC';
@@ -52,6 +52,6 @@ const dbConfigLog = {
   mockDB,
 };
 
-logger.info(`dbConfig: ${JSON5.stringify(dbConfigLog)}`);
+/// logger.info(`dbConfig: ${JSON5.stringify(dbConfigLog)}`);
 
 module.exports = { dbConfig };

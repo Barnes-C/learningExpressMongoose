@@ -5,6 +5,10 @@
     <input type="text" name="name" class="form-control">
   </div>
   <div class="form-group">
+    <label for="name">Last Name</label>
+    <input type="text" name="lastName" class="form-control">
+  </div>
+  <div class="form-group">
     <label for="name">password</label>
     <input type="password" name="password" class="form-control">
   </div>
@@ -13,7 +17,7 @@
 <h4>Members</h4>
 <ul class="list-group">
   {{#each members}}
-  <li class="list-group-item">{{this.name}} : {{this.password}}</li>
+  <li class="list-group-item">{{this.name}} {{this.lastName}}: {{this.password}}</li>
   {{/each}}
 </ul>
 

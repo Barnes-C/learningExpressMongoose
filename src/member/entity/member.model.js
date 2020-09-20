@@ -2,8 +2,8 @@ const { Schema, model } = require('mongoose');
 
 const memberSchema = new Schema({
   // MongoDB generates their own index for _id
-  _id: { type: String },
   name: { type: String, required: true },
+  lastName: { type: String, required: true },
   password: {
     type: String,
     required: true,

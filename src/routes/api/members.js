@@ -5,7 +5,6 @@ const MemberModel = require('../../member/entity/member.model');
 const members = require('../../middleware/config/db/Members');
 const HttpStatus = require('../../middleware/httpStatus');
 const logger = require('../../middleware/logger');
-const { connectMongoDBClient } = require('../../middleware/config/db/mongoDB');
 
 const router = express.Router();
 
@@ -29,17 +28,18 @@ router
   })
   // Create Member
   .post('/', (req, res) => {
-    const { name, password } = req.body;
+    const { name, password, lastName } = req.body;
     const newMember = {
       _id: null,
       name,
+      lastName,
       password,
       active: true,
       age: null,
       created: Date.now(),
     };
 
-    if (!name || !password) {
+    if (!name || !password || !lastName) {
       res
         .status(HttpStatus.BAD_REQUEST)
         .send('<p>Please include a name and password</p>');

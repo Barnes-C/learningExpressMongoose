@@ -1,9 +1,10 @@
 const express = require('express');
 const { hashSync } = require('bcrypt');
 const mongoose = require('mongoose');
+const HttpStatus = require('../../middleware/httpStatus');
+const { dbConfig } = require('../../middleware/config/db/db');
 const MemberModel = require('../../member/entity/member.model');
 const members = require('../../middleware/config/db/Members');
-const HttpStatus = require('../../middleware/httpStatus');
 const logger = require('../../middleware/logger');
 
 const router = express.Router();
@@ -16,9 +17,13 @@ router
   // Get all Members by Id
   .get('/:id', (req, res) => {
     const { id } = req.params;
-    const found = members.some((member) => member.id === parseInt(id, 10));
+    // eslint-disable-next-line no-underscore-dangle
+    const found = members.some((member) => member._id === id);
     if (found) {
-      res.json(members.filter((member) => member.id === parseInt(id, 10)));
+      res
+        // eslint-disable-next-line no-underscore-dangle
+        .json(members.filter((member) => member._id === id))
+        .status(HttpStatus.OK);
     } else {
       res
         .status(HttpStatus.NOT_FOUND)
@@ -29,8 +34,8 @@ router
   // Create Member
   .post('/', (req, res) => {
     const { name, password, lastName } = req.body;
-    const newMember = {
-      _id: null,
+    const member = {
+      _id: new mongoose.Types.ObjectId().toHexString().toString(),
       name,
       lastName,
       password,
@@ -42,37 +47,42 @@ router
     if (!name || !password || !lastName) {
       res
         .status(HttpStatus.BAD_REQUEST)
-        .send('<p>Please include a name and password</p>');
+        .send('<p>Please include a name, last name and password</p>');
     }
     // Encrypting Password via bcrypt: $2b$[cost]$[22 character salt][31 character hash]
-    newMember.password = hashSync(password, SALT_ROUNDS);
+    member.password = hashSync(password, SALT_ROUNDS);
 
     mongoose.Promise = global.Promise;
-    mongoose.connect(
-      'mongodb+srv://BarnesC:p@barnescluster0.wmnj6.mongodb.net/members?retryWrites=true&w=majority',
-      { useNewUrlParser: true, useUnifiedTopology: true }
-    );
+    mongoose.connect(dbConfig.url, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
 
-    MemberModel.create(newMember, (err) => {
+    MemberModel.create(member, (err) => {
       if (err) {
         res
           .status(HttpStatus.BAD_REQUEST)
           .send(`unable to save to database, ${err}`)
           .redirect('/');
       } else {
-        res.status(HttpStatus.OK).redirect('/');
+        res
+          .status(HttpStatus.CREATED)
+
+          .redirect(201, '../');
       }
     });
 
-    members.push(newMember);
+    members.push(member);
   })
   // Update Member by Id
   .put('/:id', (req, res) => {
     const { id, name, password } = req.body;
-    const found = members.some((member) => member.id === parseInt(id, 10));
+    // eslint-disable-next-line no-underscore-dangle
+    const found = members.some((member) => member._id === id);
     if (found) {
       members.forEach((member) => {
-        if (member.id === parseInt(id, 10)) {
+        // eslint-disable-next-line no-underscore-dangle
+        if (member._id === id) {
           member.name = name || member.name; // eslint-disable-line no-param-reassign
           member.password = password || member.password; // eslint-disable-line no-param-reassign
           res.json({ msg: 'Member updated', member });
@@ -87,11 +97,13 @@ router
   // Delete Member by Id
   .delete('/:id', (req, res) => {
     const { id } = req.body;
-    const found = members.some((member) => member.id === parseInt(id, 10));
+    // eslint-disable-next-line no-underscore-dangle
+    const found = members.some((member) => member._id === id);
     if (found) {
       res.json({
         msg: 'Member deleted',
-        members: members.filter((member) => member.id !== parseInt(id, 10)),
+        // eslint-disable-next-line no-underscore-dangle
+        members: members.filter((member) => member._id !== id),
       });
     } else {
       res.status(HttpStatus.NOT_FOUND).json({

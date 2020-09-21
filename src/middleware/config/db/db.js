@@ -1,6 +1,3 @@
-const JSON5 = require('json5');
-const logger = require('../../logger');
-
 // -----------------------------------------------------------------------------
 // U m g e b u n g s v a r i a b l e
 // -----------------------------------------------------------------------------
@@ -39,19 +36,5 @@ const dbConfig = {
   dbPopulate,
   mockDB,
 };
-
-const dbConfigLog = {
-  atlas,
-  url: url.replace(/\/\/.*:/u, '//USERNAME:@').replace(/:[^:]*@/u, ':***@'),
-  adminUrl: adminUrl
-    .replace(/\/\/.*:/u, '//USERNAME:@')
-    .replace(/:[^:]*@/u, ':***@'),
-  dbName,
-  host,
-  dbPopulate,
-  mockDB,
-};
-
-/// logger.info(`dbConfig: ${JSON5.stringify(dbConfigLog)}`);
 
 module.exports = { dbConfig };

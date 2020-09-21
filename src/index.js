@@ -1,26 +1,25 @@
-const express = require('express');
-const path = require('path');
-const exphbs = require('express-handlebars');
 const compression = require('compression');
-const { connectMongoDBClient } = require('./middleware/config/db/mongoDB');
+const express = require('express');
+const exphbs = require('express-handlebars');
+const morgan = require('morgan');
+const path = require('path');
+const bodyParser = require('body-parser');
+const HttpStatus = require('./middleware/httpStatus');
 const logger = require('./middleware/logger');
 const members = require('./middleware/config/db/Members');
 
-// Express Middleware
+// Middleware
 const app = express();
-
-// Compression Middleware : ratio = 1.6
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(compression());
+app.use(morgan('dev'));
 
-// Handlebars Middleware
+// Handlebars Settings
 app.set('views', path.join(__dirname, '/views'));
 app.set('partials', path.join(__dirname, '/views/layouts'));
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
-
-// Body Parser Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 
 // Homepage route mit object passing
 app.get('/', async (_, res) =>
@@ -33,8 +32,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Members API Routes
 app.use('/api/members', require('./routes/api/members'));
 
-// MongoDB connection
-connectMongoDBClient();
+app.use((res, req, next) => {
+  const error = new Error('Path not found');
+  error.status = HttpStatus.NOT_FOUND;
+  next(error);
+});
+
+app.use((error, res) => {
+  res.status(error.status || HttpStatus.INTERNAL_ERROR);
+  res.json({
+    error: {
+      message: error.message,
+    },
+  });
+});
 
 // Listen on a port
 const PORT = process.env.PORT || 5000;

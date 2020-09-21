@@ -28,4 +28,5 @@ yarn.lock
 .DS_Store
 Thumbs.db
 
-notes.txt
+# secrets
+src/middleware/config/db/db.js

@@ -1,6 +1,7 @@
 const express = require('express');
 const { hashSync } = require('bcrypt');
 const mongoose = require('mongoose');
+const uuid = require('uuid');
 const HttpStatus = require('../../middleware/httpStatus');
 const { dbConfig } = require('../../middleware/config/db/db');
 const MemberModel = require('../../member/entity/member.model');
@@ -35,7 +36,7 @@ router
   .post('/', (req, res) => {
     const { name, password, lastName } = req.body;
     const member = {
-      _id: new mongoose.Types.ObjectId().toHexString().toString(),
+      _id: uuid.v4(),
       name,
       lastName,
       password,
@@ -65,10 +66,7 @@ router
           .send(`unable to save to database, ${err}`)
           .redirect('/');
       } else {
-        res
-          .status(HttpStatus.CREATED)
-
-          .redirect(201, '../');
+        res.redirect('/');
       }
     });
 

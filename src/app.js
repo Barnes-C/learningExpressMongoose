@@ -50,13 +50,14 @@ app.use((req, res, next) => {
   next();
 });
 
-// Error Handlers
+// Catch 404 and forward to Error-Handler
 app.use((res, req, next) => {
   const error = new Error('Not found');
   error.status = HttpStatus.NOT_FOUND;
   next(error);
 });
 
+// Error-Handler
 app.use((error, res) => {
   res.status(error.status || HttpStatus.INTERNAL_ERROR);
   res.json({

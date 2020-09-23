@@ -1,18 +1,16 @@
-const { Schema, model } = require('mongoose');
+const mongoose = require('mongoose');
 
-const memberSchema = new Schema({
-  _id: { type: String },
-  name: { type: String, required: true },
+const memberSchema = new mongoose.Schema({
+  _id: mongoose.Schema.Types.ObjectId,
+  firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   password: {
     type: String,
     required: true,
   },
   age: Date,
-  active: Boolean,
+  subscribed: Boolean,
   created: Date,
 });
 
-const MemberModel = model('Members', memberSchema);
-
-module.exports = MemberModel;
+module.exports = mongoose.model('Member', memberSchema);

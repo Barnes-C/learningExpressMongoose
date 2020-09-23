@@ -1,8 +1,8 @@
 <h1 class="text-center mb-3">{{{title}}}</h1>
 <form action="/api/members" method="POST" class="mb4">
   <div class="form-group">
-    <label for="name">Name</label>
-    <input type="text" name="name" class="form-control">
+    <label for="name">First Name</label>
+    <input type="text" name="firstName" class="form-control">
   </div>
   <div class="form-group">
     <label for="name">Last Name</label>
@@ -17,7 +17,7 @@
 <h4>Members</h4>
 <ul class="list-group">
   {{#each members}}
-  <li class="list-group-item">{{this.name}} {{this.lastName}}: {{this.password}}</li>
+  <li class="list-group-item">{{firstName}} {{lastName}}: {{password}}</li>
   {{/each}}
 </ul>
 

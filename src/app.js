@@ -2,10 +2,13 @@ const bodyParser = require('body-parser');
 const compression = require('compression');
 const express = require('express');
 const exphbs = require('express-handlebars');
+const mongoose = require('mongoose');
 const morgan = require('morgan');
 const path = require('path');
+const favicon = require('serve-favicon');
 const HttpStatus = require('./middleware/httpStatus');
 const members = require('./middleware/config/db/Members');
+const { dbConfig } = require('./middleware/config/db/db');
 
 const app = express();
 
@@ -18,7 +21,16 @@ app.use(morgan('dev'));
 // Handlebars Settings for View-Engine
 app.set('views', path.join(__dirname, '/views'));
 app.set('partials', path.join(__dirname, '/views/layouts'));
-app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
+app.engine(
+  'handlebars',
+  exphbs({
+    defaultLayout: 'main',
+    runtimeOptions: {
+      allowProtoPropertiesByDefault: true,
+      allowProtoMethodsByDefault: true,
+    },
+  })
+);
 app.set('view engine', 'handlebars');
 
 // Homepage
@@ -28,6 +40,9 @@ app.get('/', async (_, res) =>
 
 // Set public/static folder
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Set Favicon
+app.use(favicon(path.join(__dirname, 'public/img', 'favicon.ico')));
 
 // API Routes
 const MemberRoutes = require('./routes/api/members');
@@ -65,6 +80,12 @@ app.use((error, res) => {
       message: error.message,
     },
   });
+});
+
+// MongoDB Connection
+mongoose.connect(dbConfig.url, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
 
 module.exports = app;

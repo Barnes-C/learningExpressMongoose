@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const HttpStatus = require('../../middleware/httpStatus');
 const Member = require('../../member/entity/member.model');
 const logger = require('../../middleware/logger');
-const { update } = require('../../member/entity/member.model');
 
 const router = express.Router();
 
@@ -79,13 +78,14 @@ router
 
   // Update Member by Id
   .put('/:id', (req, res) => {
-    const { id, newFirstName, newLastName, newPassword } = req.body;
+    const { id } = req.params;
     const target = mongoose.Types.ObjectId(id);
 
     const updateOps = {};
     for (const ops of req.body) {
       updateOps[ops.propName] = ops.value;
     }
+
     Member.updateOne({ _id: target }, { $set: updateOps })
       .exec()
       .then((result) => {

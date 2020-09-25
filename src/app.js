@@ -45,10 +45,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(favicon(path.join(__dirname, 'public/img', 'favicon.ico')));
 
 // API Routes
-const MemberRoutes = require('./routes/api/members');
+const MemberRoutes = require('./api/routes/members');
 // const MailRoutes = require('./routes/api/mail');
 
-app.use('/api/members', MemberRoutes);
+app.use('/members', MemberRoutes);
 // app.use('/api/mail', MailRoutes);
 
 // CORS Handler

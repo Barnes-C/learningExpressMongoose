@@ -1,19 +1,16 @@
 const express = require('express');
-const { hashSync } = require('bcrypt');
 const mongoose = require('mongoose');
 const HttpStatus = require('../../middleware/httpStatus');
-const Member = require('../models/member');
+const Mail = require('../models/member');
 const logger = require('../../middleware/logger');
 
 const router = express.Router();
 
-const SALT_ROUNDS = 10;
-
 router
 
-  // Get all Members
+  // Get all Mails
   .get('/', (req, res) => {
-    Member.find()
+    Mail.find()
       .exec()
       .then((docs) => {
         logger.info(docs);
@@ -24,10 +21,10 @@ router
       });
   })
 
-  // Get Member by Id
+  // Get Mail by Id
   .get('/:id', (req, res) => {
     const { id } = req.params;
-    Member.findById(id)
+    Mail.findById(id)
       .exec()
       .then((doc) => {
         if (doc) {
@@ -44,27 +41,18 @@ router
       });
   })
 
-  // Create Member
+  // Create Mail
   .post('/', (req, res) => {
-    const { firstName, lastName, password } = req.body;
-
-    if (!firstName || !password || !lastName) {
-      res
-        .status(HttpStatus.BAD_REQUEST)
-        .send('<p>Please include a name, last name and password</p>');
-    }
-
-    const member = new Member({
-      _id: new mongoose.Types.ObjectId(),
-      firstName,
-      lastName,
-      password: hashSync(password, SALT_ROUNDS),
-      subscribed: true,
-      age: null,
-      created: Date.now(),
+    const { _id, sender, reciever, spam } = req.body;
+    const mail = new Mail({
+      _id: mongoose.Schema.Types.ObjectId(_id),
+      sender,
+      reciever,
+      spam,
+      send: Date.now(),
     });
 
-    member
+    mail
       .save()
       .then((result) => {
         res.status(HttpStatus.CREATED).json(result);
@@ -76,7 +64,7 @@ router
       });
   })
 
-  // Update Member by Id
+  // Update Mail by Id
   .put('/:id', (req, res) => {
     const { id } = req.params;
     const target = mongoose.Types.ObjectId(id);
@@ -86,7 +74,7 @@ router
       updateOps[ops.propName] = ops.value;
     }
 
-    Member.updateOne({ _id: target }, { $set: updateOps })
+    Mail.updateOne({ _id: target }, { $set: updateOps })
       .exec()
       .then((result) => {
         logger.info(result);
@@ -98,11 +86,11 @@ router
       });
   })
 
-  // Delete Member by Id
+  // Delete Mail by Id
   .delete('/:id', (req, res) => {
     const { id } = req.params;
     const target = mongoose.Types.ObjectId(id);
-    Member.deleteOne({ _id: target })
+    Mail.deleteOne({ _id: target })
       .exec()
       .then((result) => {
         res.status(HttpStatus.OK).json(result);

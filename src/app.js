@@ -46,10 +46,10 @@ app.use(favicon(path.join(__dirname, 'public/img', 'favicon.ico')));
 
 // API Routes
 const MemberRoutes = require('./api/routes/members');
-// const MailRoutes = require('./routes/api/mail');
+const MailRoutes = require('./api/routes/mails');
 
 app.use('/members', MemberRoutes);
-// app.use('/api/mail', MailRoutes);
+app.use('/mail', MailRoutes);
 
 // CORS Handler
 app.use((req, res, next) => {

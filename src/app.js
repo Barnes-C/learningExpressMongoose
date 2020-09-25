@@ -7,7 +7,6 @@ const morgan = require('morgan');
 const path = require('path');
 const favicon = require('serve-favicon');
 const HttpStatus = require('./middleware/httpStatus');
-const members = require('./middleware/config/db/Members');
 const { dbConfig } = require('./middleware/config/db/db');
 
 const app = express();
@@ -34,9 +33,7 @@ app.engine(
 app.set('view engine', 'handlebars');
 
 // Homepage
-app.get('/', async (_, res) =>
-  res.render('index', { title: 'Member App', members })
-);
+app.get('/', async (_, res) => res.render('index', { title: 'Member App' }));
 
 // Set public/static folder
 app.use(express.static(path.join(__dirname, 'public')));
@@ -45,10 +42,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(favicon(path.join(__dirname, 'public/img', 'favicon.ico')));
 
 // API Routes
-const MemberRoutes = require('./api/routes/members');
+const MemberRoutes = require('./api/routes/member');
 const MailRoutes = require('./api/routes/mails');
 
-app.use('/members', MemberRoutes);
+app.use('/member', MemberRoutes);
 app.use('/mail', MailRoutes);
 
 // CORS Handler

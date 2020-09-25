@@ -43,11 +43,13 @@ router
 
   // Create Mail
   .post('/', (req, res) => {
-    const { _id, sender, reciever, spam } = req.body;
+    const { sender, reciever, content, spam } = req.body;
+
     const mail = new Mail({
-      _id: mongoose.Schema.Types.ObjectId(_id),
+      _id: new mongoose.Types.ObjectId(),
       sender,
       reciever,
+      content,
       spam,
       send: Date.now(),
     });

@@ -8,7 +8,6 @@ const mailSchema = new mongoose.Schema({
   sender: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Member',
-    required: true,
   },
   reciever: {
     type: mongoose.Schema.Types.ObjectId,

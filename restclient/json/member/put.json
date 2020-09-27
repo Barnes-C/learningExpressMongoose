@@ -1,0 +1,10 @@
+[
+  {
+    "propName": "firstName",
+    "value": "firstNameUpdated"
+  },
+  {
+    "propName": "lastName",
+    "value": "lastNameUpdated"
+  }
+]

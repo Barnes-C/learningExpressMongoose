@@ -5,17 +5,17 @@ POST http://{{host}}/member
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.$.token}}
 
-< .\json\member-post.json
+< .\json\member\post.json
 
 ### Neuer Member mit ungueltigen Daten anlegen
 POST http://{{host}}/member
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.$.token}}
 
-< .\json\member-post-invalid.json
+< .\json\member\post-invalid.json
 
 ### Neuer Member ohne Login anlegen
 POST http://{{host}}/member
 Content-Type: application/json
 
-< .\json\member-post.json
+< .\json\member\post.json

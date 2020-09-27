@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
 
 const mailSchema = new mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
+  _id: {
+    type: mongoose.Schema.Types.ObjectId,
+    default: mongoose.Types.ObjectId(),
+  },
   sender: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Member',
@@ -14,7 +17,7 @@ const mailSchema = new mongoose.Schema({
   },
   content: { type: String, required: true },
   spam: Boolean,
-  send: Date,
+  sent: { type: Date, default: Date.now() },
 });
 
 module.exports = mongoose.model('Mail', mailSchema);

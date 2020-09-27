@@ -1,5 +1,5 @@
 {
-  "name": "barnes.authentication",
+  "name": "barnes.biz",
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
@@ -29,5 +29,5 @@
   },
   "author": "Christopher Barnes",
   "license": "GPL-3.0",
-  "description": ""
+  "description": "Source code for https://barnes.biz"
 }

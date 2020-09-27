@@ -1,5 +1,10 @@
-{
-  "firstName": "Christopher",
-  "lastName": "Barnes",
-  "password": "Test123"
-}
+[
+  {
+    "propName": "firstName",
+    "value": "firstNameUpdated"
+  },
+  {
+    "propName": "lastName",
+    "value": "lastNameUpdated"
+  }
+]

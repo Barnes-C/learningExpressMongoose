@@ -1,0 +1,28 @@
+
+@host = localhost:5000
+
+### Suche alle Mails
+http://{{host}}/mail
+
+### Suche mit vorhandener Mail-ID
+http://{{host}}/mail/000000000000000000000001
+
+### Suche mit vorhandener Mail-ID und Versionsnummer
+http://{{host}}/mail/000000000000000000000001
+If-None-Match: "0"
+
+### Suche mit vorhandener Mail-ID und falscher Versionsnummer
+http://{{host}}/mail/000000000000000000000001
+If-None-Match: 0
+
+### Suche mit ungueltiger Mail-ID
+http://{{host}}/mail/YYYYYYYYYYYYYYYYYYYYYYYY
+
+### Suche mit nicht-vorhandener Mail-ID
+http://{{host}}/mail/000000000000000000000004
+
+### Suche mit gueltiger Mailart
+http://{{host}}/mail?subscribed=true
+
+### Optionen zu Mail-ID
+OPTIONS http://{{host}}/mail/00000000-0000-0000-0000-000000000001

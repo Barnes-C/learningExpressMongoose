@@ -43,28 +43,28 @@ app.use(favicon(path.join(__dirname, 'public/img', 'favicon.ico')));
 
 // API Routes
 const MemberRoutes = require('./api/routes/member');
-const MailRoutes = require('./api/routes/mails');
+const MailRoutes = require('./api/routes/mail');
 
 app.use('/member', MemberRoutes);
 app.use('/mail', MailRoutes);
 
 // CORS Handler
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Origin', 'localhost barnes.biz');
   res.header(
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept, Authorization'
   );
   if (req.method === 'OPTIONS') {
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     return res.status(HttpStatus.OK).json({});
   }
   next();
 });
 
 // Catch 404 and forward to Error-Handler
-app.use((res, req, next) => {
-  const error = new Error('Not found');
+app.use((req, _, next) => {
+  const error = new Error(`${req.url} not found`);
   error.status = HttpStatus.NOT_FOUND;
   next(error);
 });
@@ -72,11 +72,13 @@ app.use((res, req, next) => {
 // Error-Handler
 app.use((error, res) => {
   res.status(error.status || HttpStatus.INTERNAL_ERROR);
-  res.json({
-    error: {
-      message: error.message,
-    },
-  });
+  if (process.env.NODE_ENV === 'development') {
+    res.json({
+      error: {
+        message: error.message,
+      },
+    });
+  }
 });
 
 // MongoDB Connection

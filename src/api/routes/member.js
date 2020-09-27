@@ -14,7 +14,7 @@ const SALT_ROUNDS = 10;
 router
 
   // Get all Members
-  .get('/', (req, res) => {
+  .get('/', (_, res) => {
     Member.find()
       .select('_id firstName lastName password age subscribed created')
       .exec()
@@ -38,8 +38,13 @@ router
                 list: {
                   href: `http://127.0.0.1:${port}/member`,
                 },
-                add: {
+                post: {
                   href: `http://127.0.0.1:${port}/member`,
+                  data: {
+                    firstName: 'String',
+                    lastName: 'String',
+                    password: 'String',
+                  },
                 },
                 delete: {
                   href: `http://127.0.0.1:${port}/member/${member._id}`,

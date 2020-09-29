@@ -13,10 +13,10 @@ const port = process.env.PORT || 5000;
 router
 
   // Get all Mails
-  .get('/', async (_, res) => {
+  .get('/', (_, res) => {
     Mail.find()
       .select('_id sender reciever content spam sent')
-      .populate('name')
+      .populate({ path: 'reciever', select: 'name' })
       .exec()
       .then((mails) => {
         const response = {
@@ -63,6 +63,7 @@ router
     const { id } = req.params;
     Mail.findById(id)
       .select('_id sender reciever content spam sent')
+      .populate({ path: 'reciever' })
       .exec()
       .then((mail) => {
         if (mail) {

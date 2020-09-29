@@ -19,4 +19,4 @@ const mailSchema = new mongoose.Schema({
   sent: { type: Date, default: Date.now() },
 });
 
-module.exports = mongoose.model('Mail', mailSchema);
+module.exports = mongoose.model('Mail', mailSchema, 'mails');

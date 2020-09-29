@@ -13,4 +13,4 @@ const memberSchema = new mongoose.Schema({
   created: { type: Date, default: Date.now() },
 });
 
-module.exports = mongoose.model('Member', memberSchema);
+module.exports = mongoose.model('Member', memberSchema, 'members');

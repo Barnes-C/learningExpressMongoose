@@ -13,7 +13,7 @@ const port = process.env.PORT || 5000;
 router
 
   // Get all Mails
-  .get('/', (_, res) => {
+  .get('/', async (_, res) => {
     Mail.find()
       .select('_id sender reciever content spam sent')
       .exec()
@@ -38,7 +38,7 @@ router
                 },
                 post: {
                   href: `http://127.0.0.1:${port}/mail`,
-                  data: {
+                  body: {
                     reciever: 'ObjectID',
                     content: 'String',
                   },
@@ -50,8 +50,6 @@ router
             },
           })),
         };
-
-        logger.info(response);
         res.status(HttpStatus.OK).json(response);
       })
       .catch((err) => {
@@ -60,7 +58,7 @@ router
   })
 
   // Get Mail by Id
-  .get('/:id', (req, res) => {
+  .get('/:id', async (req, res) => {
     const { id } = req.params;
     Mail.findById(id)
       .select('_id sender reciever content spam sent')
@@ -103,37 +101,34 @@ router
   })
 
   // Create Mail
-  .post('/', (req, res) => {
+  .post('/', async (req, res) => {
     const { sender, reciever, content, spam } = req.body;
 
-    Member.findById(reciever)
-      .then((result) => {
-        if (!result) {
-          return res.status(HttpStatus.NOT_FOUND).json({
-            message: 'Product not found',
-          });
-        }
-        const mail = new Mail({
-          _id: new mongoose.Types.ObjectId(),
-          sender,
-          reciever,
-          content,
-          spam,
-          sent: Date.now(),
+    Member.findById(reciever).then((member) => {
+      if (!member) {
+        return res.status(HttpStatus.NOT_FOUND).json({
+          message: 'Member not found',
         });
-        return mail.save();
-      })
-
-      .then((result) => {
-        res.status(HttpStatus.CREATED).json({
-          message: 'Created mail successfully',
-          createdMail: {
-            _id: result._id,
-            sender: result.sender,
-            reciever: result.reciever,
-            content: result.content,
-            spam: result.spam,
-            sent: result.sent,
+      }
+      const mail = new Mail({
+        _id: new mongoose.Types.ObjectId(),
+        sender,
+        reciever,
+        content,
+        spam,
+        sent: Date.now(),
+      });
+      mail
+        .save()
+        .then((result) => {
+          logger.info(result);
+          res.status(HttpStatus.CREATED).json({
+            message: 'Mail successfully created',
+            createdMail: {
+              _id: result._id,
+              product: result.product,
+              quantity: result.quantity,
+            },
             request: {
               type: 'GET POST DELETE PUT',
               _links: {
@@ -148,20 +143,19 @@ router
                 },
               },
             },
-          },
+          });
+        })
+        .catch((err) => {
+          logger.info(err);
+          res.status(500).json({
+            error: err,
+          });
         });
-        logger.info(result);
-      })
-      .catch((err) => {
-        res.status(HttpStatus.BAD_REQUEST).json({
-          error: err,
-        });
-        logger.error(err);
-      });
+    });
   })
 
   // Update Mail by Id
-  .put('/:id', (req, res) => {
+  .put('/:id', async (req, res) => {
     const { id } = req.params;
     const target = mongoose.Types.ObjectId(id);
 
@@ -199,31 +193,25 @@ router
   })
 
   // Delete Mail by Id
-  .delete('/:id', (req, res) => {
+  .delete('/:id', async (req, res) => {
     const { id } = req.params;
-    const target = mongoose.Types.ObjectId(id);
-    Mail.deleteOne({ _id: target })
-      .exec()
-      .then(() => {
-        res.status(HttpStatus.OK).json({
-          message: 'Mail deleted',
-          request: {
-            type: 'POST',
-            _links: {
-              post: {
-                href: `http://127.0.0.1:${port}/mail`,
-                data: {
-                  reciever: 'ObjectID',
-                  content: 'String',
-                },
-              },
-            },
-          },
+
+    try {
+      const mail = await Mail.findById(id);
+      if (!mail) {
+        return res.status(HttpStatus.NOT_FOUND).json({
+          message: 'Mail not found',
         });
-      })
-      .catch((err) => {
-        res.status(HttpStatus.INTERNAL_ERROR).json({ error: err });
+      }
+
+      await Mail.deleteOne({ _id: id });
+      res.status(HttpStatus.OK).json({
+        message: 'Mail deleted',
       });
+    } catch (err) {
+      logger.error(err);
+      res.status(HttpStatus.INTERNAL_ERROR).json({ error: err });
+    }
   });
 
 module.exports = router;

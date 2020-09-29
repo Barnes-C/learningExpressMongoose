@@ -207,8 +207,13 @@ router
   // Delete Member by Id
   .delete('/:id', (req, res) => {
     const { id } = req.params;
-    const target = mongoose.Types.ObjectId(id);
-    Member.deleteOne({ _id: target })
+    if (!Member.findById(id).exec()) {
+      return res
+        .status(HttpStatus.NOT_FOUND)
+        .json({ message: `Member ${id} not found` });
+    }
+    logger.debug(Member.findById(id).exec());
+    Member.deleteOne({ _id: id })
       .exec()
       .then(() => {
         res.status(HttpStatus.OK).json({
@@ -218,7 +223,7 @@ router
             _links: {
               post: {
                 href: `http://127.0.0.1:${port}/member/`,
-                data: {
+                body: {
                   firstName: 'String',
                   lastName: 'String',
                   password: 'String',

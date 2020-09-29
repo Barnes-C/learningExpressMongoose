@@ -16,15 +16,15 @@ router
   // Get all Members
   .get('/', (_, res) => {
     Member.find()
-      .select('_id firstName lastName password age subscribed created')
+      .select('_id name mail password age subscribed created')
       .exec()
       .then((members) => {
         const response = {
           count: members.length,
           members: members.map((member) => ({
             _id: member._id,
-            firstName: member.firstName,
-            lastName: member.lastName,
+            name: member.name,
+            mail: member.mail,
             password: member.password,
             age: member.age,
             subscribed: member.subscribed,
@@ -41,8 +41,8 @@ router
                 post: {
                   href: `http://127.0.0.1:${port}/member`,
                   data: {
-                    firstName: 'String',
-                    lastName: 'String',
+                    name: 'String',
+                    mail: 'String',
                     password: 'String',
                   },
                 },
@@ -66,14 +66,14 @@ router
   .get('/:id', (req, res) => {
     const { id } = req.params;
     Member.findById(id)
-      .select('_id firstName lastName password age subscribed created')
+      .select('_id name mail password age subscribed created')
       .exec()
       .then((member) => {
         if (member) {
           const response = {
             _id: member._id,
-            firstName: member.firstName,
-            lastName: member.lastName,
+            name: member.name,
+            mail: member.mail,
             password: member.password,
             age: member.age,
             subscribed: member.subscribed,
@@ -109,18 +109,18 @@ router
 
   // Create Member
   .post('/', (req, res) => {
-    const { firstName, lastName, password } = req.body;
+    const { name, mail, password } = req.body;
 
-    if (!firstName || !password || !lastName) {
+    if (!name || !password || !mail) {
       res
         .status(HttpStatus.BAD_REQUEST)
-        .send('<p>Please include a name, last name and password</p>');
+        .json({ message: 'Please include a name, email & password' });
     }
 
     const member = new Member({
       _id: new mongoose.Types.ObjectId(),
-      firstName,
-      lastName,
+      name,
+      mail,
       password: hashSync(password, SALT_ROUNDS),
       subscribed: true,
       age: null,
@@ -134,8 +134,8 @@ router
           message: 'Created member successfully',
           createdMember: {
             _id: result._id,
-            firstName: result.firstName,
-            lastName: result.lastName,
+            name: result.name,
+            mail: result.mail,
             password: result.password,
             age: result.age,
             subscribed: result.subscribed,
@@ -212,7 +212,6 @@ router
         .status(HttpStatus.NOT_FOUND)
         .json({ message: `Member ${id} not found` });
     }
-    logger.debug(Member.findById(id).exec());
     Member.deleteOne({ _id: id })
       .exec()
       .then(() => {
@@ -224,8 +223,8 @@ router
               post: {
                 href: `http://127.0.0.1:${port}/member/`,
                 body: {
-                  firstName: 'String',
-                  lastName: 'String',
+                  name: 'String',
+                  mail: 'String',
                   password: 'String',
                 },
               },

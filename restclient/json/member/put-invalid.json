@@ -1,10 +1,10 @@
 [
   {
-    "propName": "firstName",
-    "value": "firstNameUpdated"
+    "propName": "name",
+    "value": "NameUpdated"
   },
   {
-    "propName": "lastName",
-    "value": "lastNameUpdated"
+    "propName": "mail",
+    "value": "lastName@Updat.ed"
   }
 ]

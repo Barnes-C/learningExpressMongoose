@@ -16,6 +16,7 @@ router
   .get('/', async (_, res) => {
     Mail.find()
       .select('_id sender reciever content spam sent')
+      .populate('name')
       .exec()
       .then((mails) => {
         const response = {

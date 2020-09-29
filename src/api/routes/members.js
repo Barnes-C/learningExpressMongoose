@@ -93,6 +93,7 @@ router
               },
             },
           };
+          logger.info(response);
           res.status(HttpStatus.OK).json(response);
         } else {
           res

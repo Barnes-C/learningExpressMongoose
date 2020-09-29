@@ -2,6 +2,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const HttpStatus = require('../../middleware/httpStatus');
+const Member = require('../models/member');
 const Mail = require('../models/mail');
 const logger = require('../../middleware/logger');
 
@@ -105,23 +106,24 @@ router
   .post('/', (req, res) => {
     const { sender, reciever, content, spam } = req.body;
 
-    if (!reciever || !content) {
-      res
-        .status(HttpStatus.BAD_REQUEST)
-        .send('<p>Please include a reciever and content</p>');
-    }
+    Member.findById(reciever)
+      .then((result) => {
+        if (!result) {
+          return res.status(HttpStatus.NOT_FOUND).json({
+            message: 'Product not found',
+          });
+        }
+        const mail = new Mail({
+          _id: new mongoose.Types.ObjectId(),
+          sender,
+          reciever,
+          content,
+          spam,
+          sent: Date.now(),
+        });
+        return mail.save();
+      })
 
-    const mail = new Mail({
-      _id: new mongoose.Types.ObjectId(),
-      sender,
-      reciever,
-      content,
-      spam,
-      sent: Date.now(),
-    });
-
-    mail
-      .save()
       .then((result) => {
         res.status(HttpStatus.CREATED).json({
           message: 'Created mail successfully',
@@ -148,7 +150,7 @@ router
             },
           },
         });
-        logger.info(mail);
+        logger.info(result);
       })
       .catch((err) => {
         res.status(HttpStatus.BAD_REQUEST).json({

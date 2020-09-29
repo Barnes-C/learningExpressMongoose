@@ -21,7 +21,7 @@ const members = [
   {
     _id: { $oid: '5f6b8d83f8c259582cf3580f' },
     firstName: 'Athanasia',
-    lastName: 'SC',
+    lastName: 'Skaroglu-Chasioti',
     password: '$2b$10$aura6GCrZU.mMQsTcu6U5eEQIF6QHD0XZvlWhB1Blw4UCDLXAhbWK',
     subscribed: true,
     age: null,

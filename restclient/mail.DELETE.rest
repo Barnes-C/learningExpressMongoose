@@ -1,0 +1,28 @@
+
+@host = localhost:5000
+
+### Delete alle Mail
+http://{{host}}/mail
+
+### Delete mit vorhandener Mail-ID
+http://{{host}}/mail/000000000000000000000001
+
+### Delete mit vorhandener Mail-ID und Versionsnummer
+http://{{host}}/mail/000000000000000000000001
+If-None-Match: "0"
+
+### Delete mit vorhandener Mail-ID und falscher Versionsnummer
+http://{{host}}/mail/000000000000000000000001
+If-None-Match: 0
+
+### Delete mit ungueltiger Mail-ID
+http://{{host}}/mail/YYYYYYYYYYYYYYYYYYYYYYYY
+
+### Delete mit nicht-vorhandener Mail-ID
+http://{{host}}/mail/000000000000000000000004
+
+### Delete mit gueltiger Mailart
+http://{{host}}/mail?subscribed=true
+
+### Optionen zu Mail-ID
+OPTIONS http://{{host}}/mail/000000000000000000000001

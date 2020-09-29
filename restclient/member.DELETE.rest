@@ -1,0 +1,28 @@
+
+@host = localhost:5000
+
+### Delete alle Member
+DELETE http://{{host}}/member
+
+### Delete mit vorhandener Member-ID
+DELETE http://{{host}}/member/000000000000000000000001
+
+### Delete mit vorhandener Member-ID und Versionsnummer
+DELETE http://{{host}}/member/000000000000000000000001
+If-None-Match: "0"
+
+### Delete mit vorhandener Member-ID und falscher Versionsnummer
+DELETE http://{{host}}/member/000000000000000000000001
+If-None-Match: 0
+
+### Delete mit ungueltiger Member-ID
+DELETE http://{{host}}/member/YYYYYYYYYYYYYYYYYYYYYYYY
+
+### Delete mit nicht-vorhandener Member-ID
+DELETE http://{{host}}/member/000000000000000000000004
+
+### Delete mit gueltiger Memberart
+DELETE http://{{host}}/member?subscribed=true
+
+### Optionen zu Member-ID
+OPTIONS http://{{host}}/member/000000000000000000000001

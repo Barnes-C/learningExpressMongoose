@@ -15,7 +15,7 @@ const mailSchema = new mongoose.Schema({
     required: true,
   },
   content: { type: String, required: true },
-  spam: Boolean,
+  spam: { type: Boolean, default: true },
   sent: { type: Date, default: Date.now() },
 });
 

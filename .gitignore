@@ -29,4 +29,4 @@ yarn.lock
 Thumbs.db
 
 # secrets
-src/middleware/config/db/db.js
+nodemon.json

@@ -1,5 +1,5 @@
 # Default, so dass in C:\Users\<MeineKennung>\.gitignore core.autocrlf nicht notwendig ist
-#* text=auto
+text eol=lf
 
 # (Binaer-) Dateien, die nicht modifiziert werden sollen
 *.png binary

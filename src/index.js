@@ -18,7 +18,7 @@ const shutdown = () => {
 
 const startServer = () => {
   createServer(app).listen(port, () =>
-    logger.info(`Server started on port ${port}`)
+    logger.info(`Server started @ port ${port}`)
   );
   // <Ctrl>C
   process.on('SIGINT', shutdown);
@@ -28,3 +28,5 @@ const startServer = () => {
 };
 
 startServer();
+
+// Check if JWT_KEY is used from nodemon.json in user route

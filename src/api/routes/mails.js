@@ -2,6 +2,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const multer = require('multer');
+const checkAuth = require('../../middleware/check-auth');
 const HttpStatus = require('../../middleware/httpStatus');
 const User = require('../models/user');
 const Mail = require('../models/mail');
@@ -39,7 +40,7 @@ const upload = multer({
 router
 
   // Get all Mails
-  .get('/', (_, res) => {
+  .get('/', checkAuth, (_, res) => {
     Mail.find()
       .select('_id sender reciever content spam sent attachment')
       .populate({ path: 'reciever', select: 'name' })
@@ -86,7 +87,7 @@ router
   })
 
   // Get Mail by Id
-  .get('/:id', async (req, res) => {
+  .get('/:id', checkAuth, async (req, res) => {
     const { id } = req.params;
     Mail.findById(id)
       .select('_id sender reciever content spam sent attachment')
@@ -124,7 +125,7 @@ router
   })
 
   // Create Mail
-  .post('/', upload.single('attachment'), (req, res) => {
+  .post('/', checkAuth, upload.single('attachment'), (req, res) => {
     const { sender, reciever, content, spam } = req.body;
 
     User.findById(reciever).then((user) => {
@@ -179,7 +180,7 @@ router
   })
 
   // Update Mail by Id
-  .put('/:id', async (req, res) => {
+  .put('/:id', checkAuth, async (req, res) => {
     const { id } = req.params;
     const target = mongoose.Types.ObjectId(id);
 
@@ -217,7 +218,7 @@ router
   })
 
   // Delete Mail by Id
-  .delete('/:id', async (req, res) => {
+  .delete('/:id', checkAuth, async (req, res) => {
     const { id } = req.params;
 
     try {

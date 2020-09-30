@@ -1,11 +1,10 @@
 /* eslint-disable no-underscore-dangle */
 const express = require('express');
 const bcrypt = require('bcrypt');
-const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 const HttpStatus = require('../../middleware/httpStatus');
 const User = require('../models/user');
 const logger = require('../../middleware/logger');
-const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
@@ -16,7 +15,7 @@ router
   // Create User
   .post('/signup', (req, res) => {
     const { name, email, password } = req.body;
-    User.find({ email: email })
+    User.find({ email })
       .exec()
       .then((doc) => {
         if (doc.length >= 1) {

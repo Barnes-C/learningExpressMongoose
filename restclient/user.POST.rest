@@ -1,0 +1,21 @@
+@host = localhost:5000
+
+### Neuer User anlegen
+POST http://{{host}}/user
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.token}}
+
+< .\json\user\post.json
+
+### Neuer User mit ungueltigen Daten anlegen
+POST http://{{host}}/user
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.token}}
+
+< .\json\user\post-invalid.json
+
+### Neuer User ohne Login anlegen
+POST http://{{host}}/user
+Content-Type: application/json
+
+< .\json\user\post.json

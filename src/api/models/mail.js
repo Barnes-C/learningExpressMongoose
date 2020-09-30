@@ -7,11 +7,11 @@ const mailSchema = new mongoose.Schema({
   },
   sender: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Member',
+    ref: 'User',
   },
   reciever: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Member',
+    ref: 'User',
     required: true,
   },
   content: { type: String, required: true },
@@ -20,4 +20,4 @@ const mailSchema = new mongoose.Schema({
   attachment: { type: String },
 });
 
-module.exports = mongoose.model('Mail', mailSchema, 'mails');
+module.exports = mongoose.model('Mail', mailSchema);

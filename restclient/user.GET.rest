@@ -1,0 +1,28 @@
+
+@host = localhost:5000
+
+### Suche alle User
+http://{{host}}/user
+
+### Suche mit vorhandener User-ID
+http://{{host}}/user/5f7496fafefb8c54a8b33af3
+
+### Suche mit vorhandener User-ID und Versionsnummer
+http://{{host}}/user/000000000000000000000001
+If-None-Match: "0"
+
+### Suche mit vorhandener User-ID und falscher Versionsnummer
+http://{{host}}/user/000000000000000000000001
+If-None-Match: 0
+
+### Suche mit ungueltiger User-ID
+http://{{host}}/user/YYYYYYYYYYYYYYYYYYYYYYYY
+
+### Suche mit nicht-vorhandener User-ID
+http://{{host}}/user/000000000000000000000004
+
+### Suche mit gueltiger Userart
+http://{{host}}/user?subscribed=true
+
+### Optionen zu User-ID
+OPTIONS http://{{host}}/user/00000000-0000-0000-0000-000000000001

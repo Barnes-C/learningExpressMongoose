@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const multer = require('multer');
 const HttpStatus = require('../../middleware/httpStatus');
-const Member = require('../models/member');
+const Member = require('../models/user');
 const Mail = require('../models/mail');
 const logger = require('../../middleware/logger');
 

@@ -1,7 +1,0 @@
-@host = localhost:5000
-
-### Delete mit vorhandener Member-ID
-DELETE http://{{host}}/member/5f7192a038ca9c4610648753
-
-### Delete mit nicht-vorhandener Member-ID
-DELETE http://{{host}}/member/000000000000000000000004

@@ -3,7 +3,7 @@ const express = require('express');
 const { hashSync } = require('bcrypt');
 const mongoose = require('mongoose');
 const HttpStatus = require('../../middleware/httpStatus');
-const Member = require('../models/member');
+const User = require('../models/user');
 const logger = require('../../middleware/logger');
 
 const router = express.Router();
@@ -13,33 +13,33 @@ const SALT_ROUNDS = 10;
 
 router
 
-  // Get all Members
+  // Get all Users
   .get('/', (_, res) => {
-    Member.find()
+    User.find()
       .select('_id name mail password age subscribed created')
       .exec()
-      .then((members) => {
+      .then((users) => {
         const response = {
-          count: members.length,
-          members: members.map((member) => ({
-            _id: member._id,
-            name: member.name,
-            mail: member.mail,
-            password: member.password,
-            age: member.age,
-            subscribed: member.subscribed,
-            created: member.created,
+          count: users.length,
+          users: users.map((user) => ({
+            _id: user._id,
+            name: user.name,
+            mail: user.mail,
+            password: user.password,
+            age: user.age,
+            subscribed: user.subscribed,
+            created: user.created,
             request: {
               type: 'GET POST DELETE PUT',
               _links: {
                 self: {
-                  href: `http://127.0.0.1:${port}/member/${member._id}`,
+                  href: `http://127.0.0.1:${port}/user/${user._id}`,
                 },
                 list: {
-                  href: `http://127.0.0.1:${port}/member`,
+                  href: `http://127.0.0.1:${port}/user`,
                 },
                 post: {
-                  href: `http://127.0.0.1:${port}/member`,
+                  href: `http://127.0.0.1:${port}/user`,
                   data: {
                     name: 'String',
                     mail: 'String',
@@ -47,7 +47,7 @@ router
                   },
                 },
                 delete: {
-                  href: `http://127.0.0.1:${port}/member/${member._id}`,
+                  href: `http://127.0.0.1:${port}/user/${user._id}`,
                 },
               },
             },
@@ -62,27 +62,27 @@ router
       });
   })
 
-  // Get Member by Id
+  // Get User by Id
   .get('/:id', (req, res) => {
     const { id } = req.params;
-    Member.findById(id)
+    User.findById(id)
       .select('_id name mail password age subscribed created')
       .exec()
-      .then((member) => {
-        if (member) {
+      .then((user) => {
+        if (user) {
           res.status(HttpStatus.OK).json({
-            member,
+            user,
             request: {
               type: 'GET PUT DELETE',
               _links: {
                 self: {
-                  href: `http://127.0.0.1:${port}/member/${member._id}`,
+                  href: `http://127.0.0.1:${port}/user/${user._id}`,
                 },
                 put: {
-                  href: `http://127.0.0.1:${port}/member/${member._id}`,
+                  href: `http://127.0.0.1:${port}/user/${user._id}`,
                 },
                 delete: {
-                  href: `http://127.0.0.1:${port}/member/${member._id}`,
+                  href: `http://127.0.0.1:${port}/user/${user._id}`,
                 },
               },
             },
@@ -99,7 +99,7 @@ router
       });
   })
 
-  // Create Member
+  // Create User
   .post('/', (req, res) => {
     const { name, mail, password } = req.body;
 
@@ -109,7 +109,7 @@ router
         .json({ message: 'Please include a name, email & password' });
     }
 
-    const member = new Member({
+    const user = new User({
       _id: new mongoose.Types.ObjectId(),
       name,
       mail,
@@ -119,12 +119,12 @@ router
       created: Date.now(),
     });
 
-    member
+    user
       .save()
       .then((result) => {
         res.status(HttpStatus.CREATED).json({
-          message: 'Created member successfully',
-          createdMember: {
+          message: 'Created user successfully',
+          createdUser: {
             _id: result._id,
             name: result.name,
             mail: result.mail,
@@ -136,19 +136,19 @@ router
               type: 'GET PUT DELETE',
               _links: {
                 self: {
-                  href: `http://127.0.0.1:${port}/member/${result._id}`,
+                  href: `http://127.0.0.1:${port}/user/${result._id}`,
                 },
                 put: {
-                  href: `http://127.0.0.1:${port}/member/${result._id}`,
+                  href: `http://127.0.0.1:${port}/user/${result._id}`,
                 },
                 delete: {
-                  href: `http://127.0.0.1:${port}/member/${result._id}`,
+                  href: `http://127.0.0.1:${port}/user/${result._id}`,
                 },
               },
             },
           },
         });
-        logger.info(member);
+        logger.info(user);
       })
       .catch((err) => {
         res.status(HttpStatus.BAD_REQUEST).json({
@@ -158,7 +158,7 @@ router
       });
   })
 
-  // Update Member by Id
+  // Update User by Id
   .put('/:id', (req, res) => {
     const { id } = req.params;
     const target = mongoose.Types.ObjectId(id);
@@ -168,23 +168,23 @@ router
       updateOps[ops.propName] = ops.value;
     }
 
-    Member.updateOne({ _id: target }, { $set: updateOps })
+    User.updateOne({ _id: target }, { $set: updateOps })
       .exec()
       .then((result) => {
         logger.info(result);
         res.status(HttpStatus.OK).json({
-          message: 'Member updated',
+          message: 'User updated',
           request: {
             type: 'GET PUT DELETE',
             _links: {
               self: {
-                href: `http://127.0.0.1:${port}/member/${result._id}`,
+                href: `http://127.0.0.1:${port}/user/${result._id}`,
               },
               put: {
-                href: `http://127.0.0.1:${port}/member/${result._id}`,
+                href: `http://127.0.0.1:${port}/user/${result._id}`,
               },
               delete: {
-                href: `http://127.0.0.1:${port}/member/${result._id}`,
+                href: `http://127.0.0.1:${port}/user/${result._id}`,
               },
             },
           },
@@ -196,24 +196,24 @@ router
       });
   })
 
-  // Delete Member by Id
+  // Delete User by Id
   .delete('/:id', (req, res) => {
     const { id } = req.params;
-    if (!Member.findById(id).exec()) {
+    if (!User.findById(id).exec()) {
       return res
         .status(HttpStatus.NOT_FOUND)
-        .json({ message: `Member ${id} not found` });
+        .json({ message: `User ${id} not found` });
     }
-    Member.deleteOne({ _id: id })
+    User.deleteOne({ _id: id })
       .exec()
       .then(() => {
         res.status(HttpStatus.OK).json({
-          message: 'Member deleted',
+          message: 'User deleted',
           request: {
             type: 'POST',
             _links: {
               post: {
-                href: `http://127.0.0.1:${port}/member/`,
+                href: `http://127.0.0.1:${port}/user/`,
                 body: {
                   name: 'String',
                   mail: 'String',

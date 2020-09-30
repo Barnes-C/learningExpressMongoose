@@ -1,0 +1,7 @@
+@host = localhost:5000
+
+### Delete mit vorhandener User-ID
+DELETE http://{{host}}/user/5f7496fafefb8c54a8b33af3
+
+### Delete mit nicht-vorhandener User-ID
+DELETE http://{{host}}/user/000000000000000000000004

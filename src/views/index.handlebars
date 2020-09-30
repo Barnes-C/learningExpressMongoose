@@ -14,11 +14,11 @@
   </div>
   <input type="submit" value="register" class="btn-primary btn-block">
 </form>
-<h4>Members</h4>
+<h4>Users</h4>
 <ul class="list-group">
   {{#each members}}
   <li class="list-group-item">[{{_id.$oid}}] = {{name}} {{mail}}: {{password}}</li>
   {{/each}}
 </ul>
 
-<a href="/member" class="btn btn-light mt-4">Visit API</a>
+<a href="/user" class="btn btn-light mt-4">Visit API</a>

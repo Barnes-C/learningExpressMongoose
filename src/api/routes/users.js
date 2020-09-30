@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const HttpStatus = require('../../middleware/httpStatus');
 const User = require('../models/user');
 const logger = require('../../middleware/logger');
-const { Http } = require('winston/lib/winston/transports');
+const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
@@ -86,7 +86,7 @@ router
   // Login for User
   .post('/login', (req, res) => {
     const { email, password } = req.body;
-    User.find({ email: email })
+    User.find({ email })
       .exec()
       .then((user) => {
         if (user.length < 1) {
@@ -101,9 +101,14 @@ router
               .json({ message: 'Auth failed' });
           }
           if (result) {
+            const token = jwt.sign(
+              { email: user[0].email, userId: user[0]._id },
+              process.env.JWT_KEY,
+              { expiresIn: '1h' }
+            );
             return res
               .status(HttpStatus.OK)
-              .json({ message: 'Auth successful' });
+              .json({ message: 'Auth successful', token });
           }
           res.status(HttpStatus.UNAUTHORIZED).json({ message: 'Auth failed' });
         });

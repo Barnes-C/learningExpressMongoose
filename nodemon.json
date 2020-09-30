@@ -1,0 +1,9 @@
+{
+  "env": {
+    "DB_NAME": "websiteTest",
+    "DB_HOST": "barnescluster0.wmnj6.mongodb.net",
+    "DB_USER": "BarnesC",
+    "DB_PASS": "p",
+    "NODE_ENV": "development"
+  }
+}

@@ -1,7 +1,7 @@
 @host = localhost:5000
 
 ### Neuer User anlegen
-POST http://{{host}}/user
+POST http://{{host}}/user/signup
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.$.token}}
 

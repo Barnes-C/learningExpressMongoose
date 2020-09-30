@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const multer = require('multer');
 const HttpStatus = require('../../middleware/httpStatus');
-const Member = require('../models/user');
+const User = require('../models/user');
 const Mail = require('../models/mail');
 const logger = require('../../middleware/logger');
 
@@ -127,10 +127,10 @@ router
   .post('/', upload.single('attachment'), (req, res) => {
     const { sender, reciever, content, spam } = req.body;
 
-    Member.findById(reciever).then((member) => {
-      if (!member) {
+    User.findById(reciever).then((user) => {
+      if (!user) {
         return res.status(HttpStatus.NOT_FOUND).json({
-          message: 'Member not found',
+          message: 'User not found',
         });
       }
       const mail = new Mail({

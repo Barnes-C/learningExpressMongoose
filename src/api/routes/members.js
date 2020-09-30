@@ -70,14 +70,8 @@ router
       .exec()
       .then((member) => {
         if (member) {
-          const response = {
-            _id: member._id,
-            name: member.name,
-            mail: member.mail,
-            password: member.password,
-            age: member.age,
-            subscribed: member.subscribed,
-            created: member.created,
+          res.status(HttpStatus.OK).json({
+            member,
             request: {
               type: 'GET PUT DELETE',
               _links: {
@@ -92,9 +86,7 @@ router
                 },
               },
             },
-          };
-          logger.info(response);
-          res.status(HttpStatus.OK).json(response);
+          });
         } else {
           res
             .status(HttpStatus.NOT_FOUND)

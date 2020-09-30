@@ -12,6 +12,7 @@ const { dbConfig } = require('./middleware/config/db/db');
 const app = express();
 
 // Middleware
+app.use('/uploads', express.static('uploads'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(compression());
@@ -86,5 +87,6 @@ mongoose.connect(dbConfig.url, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+mongoose.Promise = global.Promise;
 
 module.exports = app;

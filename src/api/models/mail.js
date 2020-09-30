@@ -17,6 +17,7 @@ const mailSchema = new mongoose.Schema({
   content: { type: String, required: true },
   spam: { type: Boolean, default: true },
   sent: { type: Date, default: Date.now() },
+  attachment: { type: String },
 });
 
 module.exports = mongoose.model('Mail', mailSchema, 'mails');

@@ -51,7 +51,7 @@ app.use('/mail', MailRoutes);
 
 // CORS Handler
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'localhost barnes.biz');
+  res.header('Access-Control-Allow-Origin', 'localhost barnes.biz 127.0.0.1');
   res.header(
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept, Authorization'

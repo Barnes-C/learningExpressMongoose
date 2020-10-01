@@ -12,9 +12,94 @@ const port = process.env.PORT || 5000;
 const SALT_ROUNDS = 10;
 
 router
+  // Get all Users
+  .get('/', (_, res) => {
+    User.find()
+      .select('_id name email password age subscribed created')
+      .exec()
+      .then((users) => {
+        const response = {
+          count: users.length,
+          users: users.map((user) => ({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            password: user.password,
+            age: user.age,
+            subscribed: user.subscribed,
+            created: user.created,
+            request: {
+              type: 'GET POST DELETE PUT',
+              _links: {
+                self: {
+                  href: `http://127.0.0.1:${port}/user/${user._id}`,
+                },
+                list: {
+                  href: `http://127.0.0.1:${port}/user`,
+                },
+                post: {
+                  href: `http://127.0.0.1:${port}/user`,
+                  data: {
+                    name: 'String',
+                    email: 'String',
+                    password: 'String',
+                  },
+                },
+                delete: {
+                  href: `http://127.0.0.1:${port}/user/${user._id}`,
+                },
+              },
+            },
+          })),
+        };
+
+        res.status(HttpStatus.OK).json(response);
+      })
+      .catch((err) => {
+        res.status(HttpStatus.INTERNAL_ERROR).json({ error: err });
+      });
+  })
+
+  // Get User by Id
+  .get('/:id', (req, res) => {
+    const { id } = req.params;
+    User.findById(id)
+      .select('_id name email password age subscribed created')
+      .exec()
+      .then((user) => {
+        if (user) {
+          res.status(HttpStatus.OK).json({
+            user,
+            request: {
+              type: 'GET PUT DELETE',
+              _links: {
+                self: {
+                  href: `http://127.0.0.1:${port}/user/${user._id}`,
+                },
+                put: {
+                  href: `http://127.0.0.1:${port}/user/${user._id}`,
+                },
+                delete: {
+                  href: `http://127.0.0.1:${port}/user/${user._id}`,
+                },
+              },
+            },
+          });
+        } else {
+          res
+            .status(HttpStatus.NOT_FOUND)
+            .json({ msg: 'No valid entry found for provided ID' });
+        }
+      })
+      .catch((err) => {
+        res.status(HttpStatus.INTERNAL_ERROR).json({ error: err });
+        logger.error(err);
+      });
+  })
+
   // Create User
   .post('/signup', (req, res) => {
-    const { name, email, password } = req.body;
+    const { username, email, password } = req.body;
     User.find({ email })
       .exec()
       .then((doc) => {
@@ -30,7 +115,7 @@ router
             });
           }
           const user = new User({
-            name,
+            username,
             email,
             password: hash,
             age: null,
@@ -42,7 +127,7 @@ router
                 message: 'Created user successfully',
                 createdUser: {
                   _id: result._id,
-                  name: result.name,
+                  username: result.username,
                   email: result.email,
                   password: result.password,
                   age: result.age,
@@ -70,7 +155,7 @@ router
               res.status(HttpStatus.BAD_REQUEST).json({
                 error,
               });
-              logger.error(error);
+              logger.error(`${error}`);
             });
         });
       })
@@ -84,8 +169,8 @@ router
 
   // Login for User
   .post('/login', (req, res) => {
-    const { email, password } = req.body;
-    User.find({ email })
+    const { username, password } = req.body;
+    User.find({ username })
       .exec()
       .then((user) => {
         if (user.length < 1) {
@@ -101,7 +186,7 @@ router
           }
           if (result) {
             const token = jwt.sign(
-              { email: user[0].email, userId: user[0]._id },
+              { username: user[0].username, userId: user[0]._id },
               process.env.JWT_KEY,
               { expiresIn: '1h' }
             );
@@ -123,7 +208,7 @@ router
     User.findById(id)
       .exec()
       .then((user) => {
-        if (user.length < 1) {
+        if (!user) {
           return res
             .status(HttpStatus.NOT_FOUND)
             .json({ message: `User not found for id: ${id}` });
@@ -139,7 +224,7 @@ router
                   post: {
                     href: `http://127.0.0.1:${port}/user/`,
                     body: {
-                      name: 'String',
+                      username: 'String',
                       email: 'String',
                       password: 'String',
                     },

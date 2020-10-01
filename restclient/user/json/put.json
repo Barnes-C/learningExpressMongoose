@@ -1,10 +1,10 @@
 [
   {
-    "propName": "name",
+    "propName": "invalidPropName",
     "value": "NameUpdated"
   },
   {
-    "propName": "mail",
+    "propName": "email",
     "value": "lastName@Updat.ed"
   }
 ]

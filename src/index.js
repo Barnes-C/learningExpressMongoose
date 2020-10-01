@@ -18,7 +18,7 @@ const shutdown = () => {
 
 const startServer = () => {
   createServer(app).listen(port, () =>
-    logger.info(`Server started @ port ${port}`)
+    logger.info(`Server started on port ${port}`)
   );
   // <Ctrl>C
   process.on('SIGINT', shutdown);

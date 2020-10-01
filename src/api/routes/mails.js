@@ -43,7 +43,7 @@ router
   .get('/', checkAuth, (_, res) => {
     Mail.find()
       .select('_id sender reciever content spam sent attachment')
-      .populate({ path: 'reciever', select: 'name' })
+      .populate({ path: 'reciever', select: 'username' })
       .exec()
       .then((mails) => {
         const response = {

@@ -1,7 +1,0 @@
-@host = localhost:5000
-
-### Delete mit vorhandener Mail-ID
-DELETE http://{{host}}/mail/5f732832213999402058e4fa
-
-### Delete mit nicht-vorhandener Mail-ID
-DELETE http://{{host}}/mail/000000000000000000000004

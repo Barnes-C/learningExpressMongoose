@@ -1,7 +1,6 @@
 const bodyParser = require('body-parser');
 const compression = require('compression');
 const express = require('express');
-const exphbs = require('express-handlebars');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const path = require('path');
@@ -12,29 +11,11 @@ const { dbConfig } = require('./middleware/config/db/db');
 const app = express();
 
 // Middleware
-app.use('/uploads', express.static('uploads'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(compression());
 app.use(morgan('dev'));
-
-// Handlebars Settings for View-Engine
-app.set('views', path.join(__dirname, '/views'));
-app.set('partials', path.join(__dirname, '/views/layouts'));
-app.engine(
-  'handlebars',
-  exphbs({
-    defaultLayout: 'main',
-    runtimeOptions: {
-      allowProtoPropertiesByDefault: true,
-      allowProtoMethodsByDefault: true,
-    },
-  })
-);
-app.set('view engine', 'handlebars');
-
-// Homepage
-app.get('/', async (_, res) => res.render('index', { title: 'Member App' }));
+app.use('/uploads', express.static('uploads'));
 
 // Set public/static folder
 app.use(express.static(path.join(__dirname, 'public')));
@@ -46,8 +27,8 @@ app.use(favicon(path.join(__dirname, 'public/img', 'favicon.ico')));
 const UserRoutes = require('./api/routes/users');
 const MailRoutes = require('./api/routes/mails');
 
-app.use('/user', UserRoutes);
-app.use('/mail', MailRoutes);
+app.use('/users', UserRoutes);
+app.use('/mails', MailRoutes);
 
 // CORS Handler
 app.use((req, res, next) => {

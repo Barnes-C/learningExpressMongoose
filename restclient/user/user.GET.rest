@@ -2,27 +2,27 @@
 @host = localhost:5000
 
 ### Suche alle User
-http://{{host}}/user
+http://{{host}}/users
 
 ### Suche mit vorhandener User-ID
-http://{{host}}/user/000000000000000000000001
+http://{{host}}/users/000000000000000000000001
 
 ### Suche mit vorhandener User-ID und Versionsnummer
-http://{{host}}/user/000000000000000000000001
+http://{{host}}/users/000000000000000000000001
 If-None-Match: "0"
 
 ### Suche mit vorhandener User-ID und falscher Versionsnummer
-http://{{host}}/user/000000000000000000000001
+http://{{host}}/users/000000000000000000000001
 If-None-Match: 0
 
 ### Suche mit ungueltiger User-ID
-http://{{host}}/user/YYYYYYYYYYYYYYYYYYYYYYYY
+http://{{host}}/users/YYYYYYYYYYYYYYYYYYYYYYYY
 
 ### Suche mit nicht-vorhandener User-ID
-http://{{host}}/user/000000000000000000000004
+http://{{host}}/users/000000000000000000000004
 
 ### Suche mit gueltiger Userart
-http://{{host}}/user?subscribed=true
+http://{{host}}/users?subscribed=true
 
 ### Optionen zu User-ID
-OPTIONS http://{{host}}/user/00000000-0000-0000-0000-000000000001
+OPTIONS http://{{host}}/users/00000000-0000-0000-0000-000000000001

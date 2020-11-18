@@ -1,16 +1,16 @@
 /* eslint-disable no-underscore-dangle */
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const HttpStatus = require('../../shared/httpStatus');
-const User = require('../models/user');
-const logger = require('../../shared/logger');
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { HttpStatus } from '../../shared/httpStatus';
+import User from '../models/user';
+import { logger } from '../../shared/logger';
 
 const port = process.env.PORT || 5000;
 const SALT_ROUNDS = 10;
 
-module.exports = {
+export = {
     // Get all Users
-    getAll: async (_, res, next) => {
+    getAll: async (_: Request, res: Response, next) => {
         try {
             User.find()
                 .select('_id name email password age subscribed created')
@@ -62,7 +62,7 @@ module.exports = {
     },
 
     // Get User by Id
-    findById: async (req, res, next) => {
+    findById: async (req: Request, res: Response, next) => {
         try {
             const { id } = req.params;
             User.findById(id)
@@ -103,7 +103,7 @@ module.exports = {
     },
 
     // Create User
-    signUp: async (req, res, next) => {
+    signUp: async (req: Request, res: Response, next) => {
         try {
             const { username, email, password } = req.body;
             User.find({ email })
@@ -176,7 +176,7 @@ module.exports = {
     },
 
     // Login for User
-    login: async (req, res, next) => {
+    login: async (req: Request, res: Response, next) => {
         try {
             const { username, password } = req.body;
             User.find({ username })
@@ -205,12 +205,10 @@ module.exports = {
                                     process.env.JWT_KEY,
                                     { expiresIn: '1h' },
                                 );
-                                return res
-                                    .status(HttpStatus.OK)
-                                    .json({
-                                        message: 'Auth successful',
-                                        token,
-                                    });
+                                return res.status(HttpStatus.OK).json({
+                                    message: 'Auth successful',
+                                    token,
+                                });
                             }
                             res.status(HttpStatus.UNAUTHORIZED).json({
                                 message: 'Auth failed',
@@ -227,7 +225,7 @@ module.exports = {
     },
 
     // Delete User by Id
-    deleteById: async (req, res, next) => {
+    deleteById: async (req: Request, res: Response, next) => {
         try {
             const { id } = req.params;
             User.findById(id)

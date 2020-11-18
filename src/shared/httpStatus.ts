@@ -1,4 +1,4 @@
-enum HttpStatus {
+export enum HttpStatus {
     OK = 200,
     CREATED = 201,
     ACCEPTED = 202,
@@ -16,5 +16,3 @@ enum HttpStatus {
     INTERNAL_ERROR = 500,
     NOT_YET_IMPLEMENTED = 501,
 }
-
-export = HttpStatus;

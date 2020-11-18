@@ -1,0 +1,13 @@
+@host = localhost:5000
+
+### Create new User
+POST http://{{host}}/users/signup
+Content-Type: application/json
+
+< .\json\post.json
+
+### Create new User with invalid data
+POST http://{{host}}/users/signup
+Content-Type: application/json
+
+< .\json\post-invalid.json

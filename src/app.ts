@@ -1,16 +1,15 @@
-const bodyParser = require('body-parser');
-const compression = require('compression');
-const express = require('express');
-const mongoose = require('mongoose');
-const morgan = require('morgan');
-const path = require('path');
-const favicon = require('serve-favicon');
-const HttpStatus = require('./shared/httpStatus');
-const { dbConfig } = require('./shared/config/db/db');
+import bodyParser from 'body-parser';
+import compression from 'compression';
+import express from 'express';
+import mongoose from 'mongoose';
+import morgan from 'morgan';
+import path from 'path';
+import favicon from 'serve-favicon';
+import { HttpStatus } from './shared/httpStatus';
+import { dbConfig } from './shared/config/db/db';
 
 const app = express();
 
-// Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(compression());
@@ -29,7 +28,7 @@ const UserRoutes = require('./api/routes/users');
 app.use('/users', UserRoutes);
 
 // CORS Handler
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next) => {
     res.header('Access-Control-Allow-Origin', 'localhost barnes.biz 127.0.0.1');
     res.header(
         'Access-Control-Allow-Headers',
@@ -43,14 +42,14 @@ app.use((req, res, next) => {
 });
 
 // Catch 404 and forward to Error-Handler
-app.use((req, _, next) => {
+app.use((req: Request, _: Response, next) => {
     const error = new Error(`${req.url} not found`);
     error.status = HttpStatus.NOT_FOUND;
     next(error);
 });
 
 // Error-Handler
-app.use((error, res) => {
+app.use((error: Error, res: Response) => {
     res.status(error.status || HttpStatus.INTERNAL_ERROR);
     if (process.env.NODE_ENV === 'development') {
         res.json({
@@ -68,4 +67,4 @@ mongoose.connect(dbConfig.url, {
 });
 mongoose.Promise = global.Promise;
 
-module.exports = app;
+export = app;

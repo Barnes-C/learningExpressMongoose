@@ -8,9 +8,8 @@ import { logger } from '../../shared/logger';
 const port = process.env.PORT || 5000;
 const SALT_ROUNDS = 10;
 
-export = {
-    // Get all Users
-    getAll: async (_: Request, res: Response, next) => {
+// Get all Users
+export const getAll = async (_: Request, res: Response) => {
         try {
             User.find()
                 .select('_id name email password age subscribed created')
@@ -56,10 +55,8 @@ export = {
                 .catch((err) => {
                     res.status(HttpStatus.INTERNAL_ERROR).json({ error: err });
                 });
-        } catch (error) {
-            next(error);
-        }
-    },
+        } 
+    }
 
     // Get User by Id
     findById: async (req: Request, res: Response, next) => {

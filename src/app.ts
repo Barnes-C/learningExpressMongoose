@@ -27,20 +27,6 @@ const UserRoutes = require('./api/routes/users');
 
 app.use('/users', UserRoutes);
 
-// CORS Handler
-app.use((req: Request, res: Response, next) => {
-    res.header('Access-Control-Allow-Origin', 'localhost barnes.biz 127.0.0.1');
-    res.header(
-        'Access-Control-Allow-Headers',
-        'Origin, X-Requested-With, Content-Type, Accept, Authorization',
-    );
-    if (req.method === 'OPTIONS') {
-        res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-        return res.status(HttpStatus.OK).json({});
-    }
-    next();
-});
-
 // Catch 404 and forward to Error-Handler
 app.use((req: Request, _: Response, next) => {
     const error = new Error(`${req.url} not found`);
